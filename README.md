@@ -12,18 +12,45 @@ No exemplo abaixo temos 5 indices, indice 0, 1, 2, 3, 4 e 5.
 Cada um desses elementos é uma série Temporal, então temos 5 séries temporais que estão armazenadas na métrica ` prometheus_http_request_duration_seconds_bucket` e quando eu consulto uma métrica, ele me retorna um vetor de série temporal.
 
 - Instante Vector - Vetor de tempo
-```bash
-prometheus_http_request_duration_seconds_bucket{handler="/", instance="prometheus-forum-api:9090", job="prometheus-forum-api", le="+Inf"} 2
-prometheus_http_request_duration_seconds_bucket{handler="/api/v1/query", instance="prometheus-forum-api:9090", job="prometheus-forum-api", le="20"} 52
-prometheus_http_request_duration_seconds_bucket{handler="/api/v1/query_range", instance="prometheus-forum-api:9090", job="prometheus-forum-api", le="0.4"} 35
-prometheus_http_request_duration_seconds_bucket{handler="/api/v1/series", instance="prometheus-forum-api:9090", job="prometheus-forum-api", le="+Inf"} 9
-prometheus_http_request_duration_seconds_bucket{handler="/", instance="prometheus-forum-api:9090", job="prometheus-forum-api", le="1"} 2
-```
+![image](https://user-images.githubusercontent.com/52141340/199484604-7b5a62ec-f1b2-417a-b742-9e7a76c7d4a4.png)
+
+Dashboard
+![image](https://user-images.githubusercontent.com/52141340/199484734-8c909689-188d-41d5-ae84-83d42889fcd2.png)
+
 
 Range Vector
+É um valor especifico a cada scraping time, lembrando que podemos configurar o periodo do scraping no arquivo `prometheus.yml`.
+
+![image](https://user-images.githubusercontent.com/52141340/199484410-cb455017-6d9d-4893-8a0b-9acf50a48060.png)
+
+O número na lateral é o timestamp que o prometheus usa para chumbar no TSDB.
 ```bash
-prometheus_http_request_duration_seconds_bucket{handler="/", instance="prometheus-forum-api:9090", job="prometheus-forum-api", le="+Inf"} 2 @1667390080.112 2 @1667390095.112 2 @1667390110.112 2 @1667390125.112
+3 @1667390815.115
+3 @1667390830.112
+3 @1667390845.115
+3 @1667390860.112
 ```
+
+## Vamos executar ele no bash do linux para ver o resultado.
+
+![image](https://user-images.githubusercontent.com/52141340/199486561-33bcdc16-8bec-4cb1-8203-ab6834786256.png)
+
+## Aqui criei um for para executar a lista. Primeiro salvei os valores em uma variavel, e então executei o for para verificar o resultado do array. O Scraping foi feito a cada 15 segundos.
+
+```bash
+array=( @1667390815.115 @1667390830.112 @1667390845.115 @1667390860.112 )
+for i in "${array[@]}" ; do date -d $i ; done
+qua 02 nov 2022 09:06:55 -03
+qua 02 nov 2022 09:07:10 -03
+qua 02 nov 2022 09:07:25 -03
+qua 02 nov 2022 09:07:40 -03
+
+```
+![image](https://user-images.githubusercontent.com/52141340/199487638-81cb7ada-57c5-4da6-a165-36168cc378c4.png)
+
+
+Dashboard
+![image](https://user-images.githubusercontent.com/52141340/199484890-2389b85c-8b6f-4580-936f-06ef8768e9e1.png)
 
 
 # Anatomia da métrica
