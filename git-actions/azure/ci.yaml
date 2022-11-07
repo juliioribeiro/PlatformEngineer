@@ -1,0 +1,9 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on
+
+    GvzRuZCd7Rs4*vL
