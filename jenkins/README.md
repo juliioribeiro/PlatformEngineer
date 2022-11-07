@@ -14,6 +14,3 @@ Monitor
 
 
 
-# jenkins: 
-julio
-b68ee06a36f74d8ea217c24e88219a52
